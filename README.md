@@ -6,6 +6,7 @@ This project is a super simple barebones way to get your tweets to activate some
 
 ```
 pip install tweepy
+pip install moment
 ```
 
 # Authentication
