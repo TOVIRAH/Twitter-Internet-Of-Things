@@ -8,10 +8,10 @@ from tweepy.streaming import StreamListener
 
 
 # You get these from twitter and they're associated with your username
-consumer_key=   "b6DIVvmQgC1T7yX1D3sTjUtAe"
-consumer_secret="FvShomsUByGe96RMU2OcYpnlFWcCVVIQSF2KnNOXjfBdHw05xP"
-access_key=     "925237850395865088-Tzsz4snQuprHaRQ9pynE59aoLX17Go0"
-access_secret=  "hKMLw8Gq1XK3Fna5zGjnOnXqjypc0JpGpR4TadWlrXPWe"
+consumer_key=   "XXXXXXXXXXXXXXXXXXX"
+consumer_secret="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+access_key=     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+access_secret=  "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 username = "IneqDetect" # must correspond to userid
 userid = "925237850395865088"    # (http://gettwitterid.com)
