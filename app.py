@@ -1,3 +1,5 @@
+import time
+import datetime
 import subprocess
 import tweepy
 import json
@@ -6,19 +8,26 @@ from tweepy.streaming import StreamListener
 
 
 # You get these from twitter and they're associated with your username
-consumer_key=   "XXXXXXXXXXXXXXXXXXXXXX"
-consumer_secret="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-access_key=     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-access_secret=  "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+consumer_key=   "b6DIVvmQgC1T7yX1D3sTjUtAe"
+consumer_secret="FvShomsUByGe96RMU2OcYpnlFWcCVVIQSF2KnNOXjfBdHw05xP"
+access_key=     "925237850395865088-Tzsz4snQuprHaRQ9pynE59aoLX17Go0"
+access_secret=  "hKMLw8Gq1XK3Fna5zGjnOnXqjypc0JpGpR4TadWlrXPWe"
 
-username = "raspgarden" # must correspond to userid
-userid = "213877377"    # (http://gettwitterid.com)
+username = "IneqDetect" # must correspond to userid
+userid = "925237850395865088"    # (http://gettwitterid.com)
 
 deviceID = "ineq1" # some unique way to identify the device.
+now = datetime.datetime.now()
+session = str(now.year) + "-"
+session += str(now.month) + "-"
+session += str(now.day) + "_"
+session += str(now.hour) + "-"
+session += str(now.minute)
+print("device: " + deviceID + " session: " + session)
 
 modes = { # on tweet command : shell script to execute
-    'start': 'start-alsa.sh',
-    'end': 'kill-alsa.sh'
+    'start': './start-alsa.sh',
+    'end': './kill-alsa.sh'
     }
 
 # Get the Tweepy API set up and authenticated
@@ -42,10 +51,10 @@ def call_subroutine(content):
         if (content == i):
             print (modes[i])
             try:
-                subprocess.call(modes[i]) #alsa ... & alsa ... ; SCP ...
+                subprocess.call([modes[i], str(deviceID), str(session)]) #alsa ... & alsa ... ; SCP ...
                 #api.update_status(deviceID + ": " + modes[i] + " @" + username) # tweet a response.
-            except:
-                print ("exception thrown")
+            except Exception as e:
+                print (e)
                 #api.update_status(deviceID + ": " + "problem occurred" + " @" + username) # tweet a response.
 
 def get_tweet(tweet):
