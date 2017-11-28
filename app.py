@@ -3,15 +3,17 @@ import datetime
 import subprocess
 import tweepy
 import json
+import psutil
 from tweepy import Stream
 from tweepy.streaming import StreamListener
 
 
 # You get these from twitter and they're associated with your username
-consumer_key=   "b6DIVvmQgC1T7yX1D3sTjUtAe"
-consumer_secret="FvShomsUByGe96RMU2OcYpnlFWcCVVIQSF2KnNOXjfBdHw05xP"
-access_key=     "925237850395865088-Tzsz4snQuprHaRQ9pynE59aoLX17Go0"
-access_secret=  "hKMLw8Gq1XK3Fna5zGjnOnXqjypc0JpGpR4TadWlrXPWe"
+consumer_key=   "xxxxxxxxxx"
+consumer_secret="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+access_key=     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+access_secret=  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+PROCESS = "arecord"
 
 username = "IneqDetect" # must correspond to userid
 userid = "925237850395865088"    # (http://gettwitterid.com)
@@ -24,6 +26,7 @@ session += str(now.day) + "_"
 session += str(now.hour) + "-"
 session += str(now.minute)
 print("device: " + deviceID + " session: " + session)
+#there should be a better way to do the above... had to do that to avoid decimal millis
 
 modes = { # on tweet command : shell script to execute
     'start': './start-alsa.sh',
@@ -47,15 +50,19 @@ class listener(StreamListener):
 
 # Start some shell scripts processes on the device (specified above)
 def call_subroutine(content):
-    for i in modes:
-        if (content == i):
-            print (modes[i])
-            try:
-                subprocess.call([modes[i], str(deviceID), str(session)]) #alsa ... & alsa ... ; SCP ...
-                #api.update_status(deviceID + ": " + modes[i] + " @" + username) # tweet a response.
-            except Exception as e:
-                print (e)
-                #api.update_status(deviceID + ": " + "problem occurred" + " @" + username) # tweet a response.
+    if (content == 'start'):
+        print (modes['start'])
+        try:
+            subprocess.call([modes['start'], str(deviceID), str(session)])
+        except Exception as e:
+            print (e)
+    if (content == modes['end']):
+        #os.system("killall -9 arecord") didn't work
+        for proc in psutil.process_iter(): #also did not work
+            if PROCESS == proc.name():
+                proc.kill()
+    
+    
 
 def get_tweet(tweet):
     try: # check that it is a tweet
